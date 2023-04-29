@@ -1,0 +1,34 @@
+.cls-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    .cls-form{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .mat-mdc-form-field-infix{
+            min-width: 250px !important;
+        }
+    }
+
+    .cls-result{
+        width: 500px;
+        min-height: 200px;
+        max-height: 80vh;
+        overflow: hidden;
+        overflow-y: auto;
+        justify-content: center;
+        align-items: center;
+
+        .cls-no-results{
+            display: flex;
+            align-items: center;
+            font-size: 25px;
+        }
+    }
+}

@@ -1,4 +1,45 @@
-<div>
-    seccion para calcular el vuelo
-    crear formulario con los dos campos
+<div class="cls-container">
+
+    <mat-card>
+        <mat-card-content>
+            <form class="cls-form" [formGroup]="formGroup" (ngSubmit)="sendForm()">
+                <mat-form-field appearance="outline">
+                    <mat-label>Ingrese el origen</mat-label>
+                    <input matInput formControlName="origin" required maxlength="3" #origin
+                        [value]="origin.value.toUpperCase()">
+                        <mat-error *ngIf="formGroup.controls['origin'].hasError('empty')">Este campo no debe estar vacío</mat-error>
+                        <mat-error *ngIf="formGroup.controls['origin'].hasError('length')">Este campo debe tener mínimo 3 letras</mat-error>
+                        <mat-error *ngIf="formGroup.controls['origin'].hasError('pattern')">Este campo solo acepta letras</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Ingrese el destino</mat-label>
+                    <input matInput formControlName="destination" required maxlength="3" #destination
+                        [value]="destination.value.toUpperCase()">
+                    <mat-error *ngIf="formGroup.controls['destination'].hasError('empty')">Este campo no debe estar vacío</mat-error>
+                    <mat-error *ngIf="formGroup.controls['destination'].hasError('equal')">Los campos no deben ser iguales</mat-error>
+                    <mat-error *ngIf="formGroup.controls['destination'].hasError('length')">Este campo debe tener mínimo 3 letras</mat-error>
+                    <mat-error *ngIf="formGroup.controls['destination'].hasError('pattern')">Este campo solo acepta letras</mat-error>
+                </mat-form-field>
+
+                <button mat-raised-button type="submit">Buscar</button>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-content>
+            <div class="cls-result" [ngStyle]="{
+                display: !journeyResult ? 'flex' : 'initial'
+            }">
+                <div class="cls-no-results" *ngIf="!journeyResult">
+                    <mat-icon aria-hidden="false" aria-label="Not found" fontIcon="priority_high"></mat-icon>
+                    <span>Ups, no se encontrarón resultados</span>
+                </div>
+                
+            </div>
+        </mat-card-content>
+    </mat-card>
+
 </div>

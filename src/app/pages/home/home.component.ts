@@ -24,9 +24,10 @@ export class HomeComponent implements OnInit {
     //hacer peticion al back para generar el token
     //guardar el token en el localstorage 
     //agregar interceptor si el token caduca retornar a la pagina de home
-    this.router.navigate(["/calculate-flight"]);
+    
 
     setTimeout(() => {
+      this.router.navigate(["/calculate-flight"]);
       this.globalService.toggleLoading(false);
     }, 3000)
   }
