@@ -15,7 +15,7 @@ export class CalculateFlightComponent implements OnInit {
 
   destinationError:string = 'Este campo no debe de estar vacio';
 
-  journeyResult: Journey | null = null;
+  journeyResult: Journey[] | null = null;
 
   temp: Journey[] = [
     {
@@ -28,17 +28,17 @@ export class CalculateFlightComponent implements OnInit {
     {
       flights: [
         {
-          destination: 'EUR',
-          origin: 'MZL',
+          destination: 'MZL',
+          origin: 'EUR',
           transport: {
             flightCarrier: 'Air test',
             flightNumber: '15024'
           },
-          price: 2000
+          price: 4000
         },
         {
           destination: 'POP',
-          origin: 'EUR',
+          origin: 'MZL',
           transport: {
             flightCarrier: 'Air test2',
             flightNumber: '8888'
@@ -55,9 +55,9 @@ export class CalculateFlightComponent implements OnInit {
           price: 1500
         }
       ],
-      origin: 'MZL',
+      origin: 'EUR',
       destination: 'CAL',
-      price: 5000,
+      price: 7000,
       stops: 2
     }
   ]
@@ -66,6 +66,8 @@ export class CalculateFlightComponent implements OnInit {
     private globalService: GlobalService,
     private fb: FormBuilder
   ) {
+
+    this.journeyResult = this.temp;
 
     this.formGroup = this.fb.group({
       origin: [null, [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-Z]*$')]],

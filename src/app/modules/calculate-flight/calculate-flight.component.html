@@ -7,19 +7,26 @@
                     <mat-label>Ingrese el origen</mat-label>
                     <input matInput formControlName="origin" required maxlength="3" #origin
                         [value]="origin.value.toUpperCase()">
-                        <mat-error *ngIf="formGroup.controls['origin'].hasError('empty')">Este campo no debe estar vacío</mat-error>
-                        <mat-error *ngIf="formGroup.controls['origin'].hasError('length')">Este campo debe tener mínimo 3 letras</mat-error>
-                        <mat-error *ngIf="formGroup.controls['origin'].hasError('pattern')">Este campo solo acepta letras</mat-error>
+                    <mat-error *ngIf="formGroup.controls['origin'].hasError('empty')">Este campo no debe estar
+                        vacío</mat-error>
+                    <mat-error *ngIf="formGroup.controls['origin'].hasError('length')">Este campo debe tener mínimo 3
+                        letras</mat-error>
+                    <mat-error *ngIf="formGroup.controls['origin'].hasError('pattern')">Este campo solo acepta
+                        letras</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <mat-label>Ingrese el destino</mat-label>
                     <input matInput formControlName="destination" required maxlength="3" #destination
                         [value]="destination.value.toUpperCase()">
-                    <mat-error *ngIf="formGroup.controls['destination'].hasError('empty')">Este campo no debe estar vacío</mat-error>
-                    <mat-error *ngIf="formGroup.controls['destination'].hasError('equal')">Los campos no deben ser iguales</mat-error>
-                    <mat-error *ngIf="formGroup.controls['destination'].hasError('length')">Este campo debe tener mínimo 3 letras</mat-error>
-                    <mat-error *ngIf="formGroup.controls['destination'].hasError('pattern')">Este campo solo acepta letras</mat-error>
+                    <mat-error *ngIf="formGroup.controls['destination'].hasError('empty')">Este campo no debe estar
+                        vacío</mat-error>
+                    <mat-error *ngIf="formGroup.controls['destination'].hasError('equal')">Los campos no deben ser
+                        iguales</mat-error>
+                    <mat-error *ngIf="formGroup.controls['destination'].hasError('length')">Este campo debe tener mínimo
+                        3 letras</mat-error>
+                    <mat-error *ngIf="formGroup.controls['destination'].hasError('pattern')">Este campo solo acepta
+                        letras</mat-error>
                 </mat-form-field>
 
                 <button mat-raised-button type="submit">Buscar</button>
@@ -29,17 +36,42 @@
     </mat-card>
 
     <mat-card>
-        <mat-card-content>
-            <div class="cls-result" [ngStyle]="{
-                display: !journeyResult ? 'flex' : 'initial'
-            }">
-                <div class="cls-no-results" *ngIf="!journeyResult">
-                    <mat-icon aria-hidden="false" aria-label="Not found" fontIcon="priority_high"></mat-icon>
-                    <span>Ups, no se encontrarón resultados</span>
-                </div>
-                
+        <mat-card-content class="cls-result" [ngStyle]="{
+            display: !journeyResult ? 'flex' : 'initial'
+        }">
+            <div class="cls-no-results" *ngIf="!journeyResult">
+                <mat-icon aria-hidden="false" aria-label="Not found" fontIcon="priority_high"></mat-icon>
+                <span>Ups, no se encontrarón resultados</span>
             </div>
+
+            <mat-accordion *ngIf="journeyResult">
+                <mat-expansion-panel *ngFor="let item of journeyResult" [hideToggle]="item.stops === 0">
+                    <mat-expansion-panel-header>
+
+                        <ng-container *ngTemplateOutlet="temFlight; context: { item: item }"></ng-container>
+
+                    </mat-expansion-panel-header>
+
+                    <div *ngIf="item.stops > 0">
+                        <div class="cls-detail">Detalles:</div>
+                        <ng-container *ngFor="let stop of item.flights">
+                            <ng-container *ngTemplateOutlet="temFlight; context: { item: stop }"></ng-container>
+                        </ng-container>
+                    </div>
+
+                </mat-expansion-panel>
+            </mat-accordion>
+
         </mat-card-content>
     </mat-card>
-
 </div>
+
+<ng-template #temFlight let-item="item">
+    <div class="cls-flight-header">
+        <span>Origen: {{item.origin}}</span>
+        <span>Destino: {{item.destination}}</span>
+        <span>Precio: {{item.price}}</span>
+        <span *ngIf="item.stops > 0">Escalas: {{item.stops}}</span>
+        <span *ngIf="item.stops === 0">Directo</span>
+    </div>
+</ng-template>
