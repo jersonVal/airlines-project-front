@@ -7,6 +7,16 @@ export class GlobalService {
 
   isLoading:boolean = false;
 
+  peso = new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+  });
+
+  dolar = new Intl.NumberFormat("us-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
   constructor(
   ) {
   }

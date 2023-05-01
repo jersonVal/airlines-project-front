@@ -29,13 +29,28 @@
                         letras</mat-error>
                 </mat-form-field>
 
+                <mat-form-field appearance="fill">
+                    <mat-label>Tipo de moneda</mat-label>
+                    <mat-select formControlName="currency">
+                        <mat-option *ngFor="let value of currencies" [value]="value.value">{{value.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
                 <button mat-raised-button type="submit">Buscar</button>
 
             </form>
         </mat-card-content>
     </mat-card>
 
-    <mat-card *ngIf="showResponse">
+    <mat-card *ngIf="showResponse" class="cls-result-container">
+        <div class="cls-currency" *ngIf="journeyResult.length > 0">
+            <mat-form-field appearance="fill">
+                <mat-label>Tipo de moneda</mat-label>
+                <mat-select [(ngModel)]="currency" (ngModelChange)="changeCurrency()">
+                    <mat-option *ngFor="let value of currencies" [value]="value.value">{{value.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
         <mat-card-content class="cls-result" [ngStyle]="{
             display: journeyResult.length === 0 ? 'flex' : 'initial'
         }">
@@ -70,7 +85,9 @@
     <div class="cls-flight-header">
         <span>Origen: {{item.origin}}</span>
         <span>Destino: {{item.destination}}</span>
-        <span>Precio: {{item.price}}</span>
+        <span *ngIf="currency === 'usd'">Precio: {{globalService.dolar.format(item.formatPrice ? item.formatPrice : item.price).split(',')[0]}}</span>
+        <span *ngIf="currency === 'eur'">Precio: {{globalService.dolar.format(item.formatPrice ? item.formatPrice : item.price).split(',')[0]}}</span>
+        <span *ngIf="currency === 'cop'">Precio: {{globalService.peso.format(item.formatPrice ? item.formatPrice : item.price).split(',')[0]}}</span>
         <span *ngIf="item.stops > 0">Escalas: {{item.stops}}</span>
         <span *ngIf="item.stops === 0">Directo</span>
     </div>

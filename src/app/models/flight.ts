@@ -5,4 +5,5 @@ export interface Flight {
     origin: string;
     destination: string;
     price: number;
+    formatPrice: number;
 }

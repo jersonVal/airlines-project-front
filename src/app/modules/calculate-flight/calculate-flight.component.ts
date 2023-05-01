@@ -16,15 +16,30 @@ export class CalculateFlightComponent implements OnInit {
   formGroup: FormGroup;
 
   destinationError: string = 'Este campo no debe de estar vacio';
+  currency: string = 'usd';
 
-  journeyResult: Journey[]  = [];
+  journeyResult: Journey[] = [];
+  currencies = [
+    {
+      name: 'Dolar',
+      value: 'usd'
+    },
+    {
+      name: 'Euro',
+      value: 'eur'
+    },
+    {
+      name: 'Peso colombiano',
+      value: 'cop'
+    }
+  ];
 
   showResponse = false;
 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private fb: FormBuilder,
     private http: HttpClient,
     private snackBar: MatSnackBar
@@ -32,13 +47,30 @@ export class CalculateFlightComponent implements OnInit {
 
     this.formGroup = this.fb.group({
       origin: [null, [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-Z]*$')]],
-      destination: [null, [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-Z]*$')]]
+      destination: [null, [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zA-Z]*$')]],
+      currency: ['usd', [Validators.required]]
     });
 
   }
 
   ngOnInit(): void {
 
+  }
+
+  changeCurrency(): void {
+    const value = this.currency === 'usd' ? 1 : this.currency === 'cop' ? 4708 : 0.91;
+
+    this.journeyResult = this.journeyResult.map((journey) => {
+      journey['flights'] = journey['flights'].map((fly) => {
+        fly['formatPrice'] = fly['price'] * value;
+        return fly
+      })
+
+      journey['formatPrice'] = journey['price'] * value;
+      
+      return journey
+    })
+    
   }
 
   sendForm(): void {
@@ -57,22 +89,26 @@ export class CalculateFlightComponent implements OnInit {
 
         const origin = this.formGroup.value.origin.toUpperCase()
         const destination = this.formGroup.value.destination.toUpperCase()
+        const currency = this.formGroup.value.currency
         const token = localStorage.getItem("token");
 
-        this.http.get(`http://localhost:3000/flight/journey/${origin}/${destination}`, {
+        this.http.get(`http://localhost:3000/flight/journey/${origin}/${destination}/${currency}`, {
           headers: {
-            authorization: `Bearer ${token ? token : null}`
+            authorization: `Bearer ${token}`
           }
         }).subscribe({
           next: (res: any) => {
             if (res.response) {
 
+              this.currency = this.formGroup.value.currency;
+
               this.journeyResult = res.data;
-              if(!this.showResponse){
+
+              if (!this.showResponse) {
                 this.showResponse = true
               }
 
-            }else{
+            } else {
 
               console.log(res.erro);
               this.snackBar.open("Ups! hubo un error", 'Cerrar', {
@@ -91,7 +127,7 @@ export class CalculateFlightComponent implements OnInit {
               verticalPosition: this.verticalPosition,
             })
           }
-          
+
         })
       } catch (error) {
 
@@ -100,7 +136,7 @@ export class CalculateFlightComponent implements OnInit {
         this.snackBar.open("Ups! hubo un error", 'Cerrar', {
           verticalPosition: this.verticalPosition,
         })
-       
+
       }
 
     } else {
