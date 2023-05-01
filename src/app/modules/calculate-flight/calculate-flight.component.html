@@ -35,7 +35,7 @@
         </mat-card-content>
     </mat-card>
 
-    <mat-card>
+    <mat-card *ngIf="showResponse">
         <mat-card-content class="cls-result" [ngStyle]="{
             display: !journeyResult ? 'flex' : 'initial'
         }">
