@@ -37,14 +37,14 @@
 
     <mat-card *ngIf="showResponse">
         <mat-card-content class="cls-result" [ngStyle]="{
-            display: !journeyResult ? 'flex' : 'initial'
+            display: journeyResult.length === 0 ? 'flex' : 'initial'
         }">
-            <div class="cls-no-results" *ngIf="!journeyResult">
+            <div class="cls-no-results" *ngIf="journeyResult.length === 0">
                 <mat-icon aria-hidden="false" aria-label="Not found" fontIcon="priority_high"></mat-icon>
                 <span>Ups, no se encontrarón resultados</span>
             </div>
 
-            <mat-accordion *ngIf="journeyResult">
+            <mat-accordion *ngIf="journeyResult.length > 0">
                 <mat-expansion-panel *ngFor="let item of journeyResult" [hideToggle]="item.stops === 0">
                     <mat-expansion-panel-header>
 

@@ -3,6 +3,7 @@ import { GlobalService } from "src/app/services/global.service";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Journey } from "src/app/models/journey";
 import { HttpClient } from "@angular/common/http";
+import { MatSnackBar, MatSnackBarVerticalPosition } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-calculate-flight",
@@ -16,14 +17,17 @@ export class CalculateFlightComponent implements OnInit {
 
   destinationError: string = 'Este campo no debe de estar vacio';
 
-  journeyResult: Journey[] | null = null;
+  journeyResult: Journey[]  = [];
 
   showResponse = false;
+
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(
     private globalService: GlobalService,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private snackBar: MatSnackBar
   ) {
 
     this.formGroup = this.fb.group({
@@ -53,30 +57,50 @@ export class CalculateFlightComponent implements OnInit {
 
         const origin = this.formGroup.value.origin.toUpperCase()
         const destination = this.formGroup.value.destination.toUpperCase()
+        const token = localStorage.getItem("token");
 
-        this.http.get(`http://localhost:3000/flight/journey/${origin}/${destination}`).subscribe({
+        this.http.get(`http://localhost:3000/flight/journey/${origin}/${destination}`, {
+          headers: {
+            authorization: `Bearer ${token ? token : null}`
+          }
+        }).subscribe({
           next: (res: any) => {
             if (res.response) {
-              this.journeyResult = res.data;
 
+              this.journeyResult = res.data;
               if(!this.showResponse){
                 this.showResponse = true
               }
 
             }else{
+
               console.log(res.erro);
-              //mandar mensaje de que hubo un error
+              this.snackBar.open("Ups! hubo un error", 'Cerrar', {
+                verticalPosition: this.verticalPosition,
+              })
+
             }
+
             this.globalService.toggleLoading(false);
+
           },
           error: (err) => {
             console.log(err);
-            //mandar mensaje de que hubo un error
+            this.globalService.toggleLoading(false);
+            this.snackBar.open("Ups! hubo un error", 'Cerrar', {
+              verticalPosition: this.verticalPosition,
+            })
           }
+          
         })
       } catch (error) {
+
         console.log(error);
-        //mandar mensaje de que hubo un error
+        this.globalService.toggleLoading(false);
+        this.snackBar.open("Ups! hubo un error", 'Cerrar', {
+          verticalPosition: this.verticalPosition,
+        })
+       
       }
 
     } else {
