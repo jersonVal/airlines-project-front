@@ -1,27 +1,20 @@
-# AirlinesProjectFront
+# Airlines project front end
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.7.
+Sistema para la busqueda de vuelos, lo primero que vera en pantalla al ingresar en la app sera un boton de iniciar la funcion de este es hacer una peticion a servidor backend el cual generara un token jwt el cual se almacenara en el localstorage y sera utilizado para la autenticacion de los servicios, este tiene una validez de 5 minutos. Se utilizo un interceptor para verificar las peticiones y regresar al home cuando las peticiones sean de tipo 401 'unauthorized'.
 
-## Development server
+En la seccion del formulario se aplico validacion de no datos iguales, solo letras, tres caracteres exactos por input, inputs no vacios, se agrego el campo 'Tipo de moneda' para definir en que tipo de moneda se traeran los resultados del servidor backend.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Los resultados de los vuelos se muestran en un componente de tipo acordeon, el cual contiene la informacion de cada una de las escalas si no es una ruta directa. 
 
-## Code scaffolding
+## Tecnologias utilizadas
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Angular
+- Angular material
+- rxjs
 
-## Build
+## Desarrollador
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+nombre: Jerson alexis valencia
+Correo: jersonval1996@gmail.com
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
